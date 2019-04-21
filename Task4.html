@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Task 4</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript">
+        let promises = [];
+        for (let number = 1; number <= 10; number++) {
+            let promise = new Promise((resolve, reject) => {
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', 'https://jsonplaceholder.typicode.com/users/' + number, true);
+                xhr.send();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState != 4) {
+                        return;
+                    }
+                    if (xhr.status != 200) {
+                        reject('JSON: Error', xhr.status, xhr.statusText);
+                    } else {
+                        resolve(JSON.parse(xhr.responseText));
+                    }
+                };
+            });
+            promise.then(
+                result => {
+                    // запустится при вызове resolve
+                    console.log('Promise №' + number + ':', promise);
+                    promises.push(result);
+                },
+                error => {
+                    // запустится при вызове reject
+                    console.log(error)
+                }
+            );
+        }
+        console.log('Итоговый массив данных:', promises);
+    </script>
+</head>
+<body>
+<div class="window">Результаты выведены в консоль.</div>
+</body>
+</html>
